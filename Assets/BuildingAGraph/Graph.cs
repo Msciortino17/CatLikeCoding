@@ -5,10 +5,11 @@ using UnityEngine;
 
 public delegate float GraphFunction(float _x);
 
-public enum Functions
+public enum GraphFunctions
 {
     BasicSquared,
     Sin,
+    MultiSin,
     Cos,
     Tan,
 }
@@ -30,10 +31,10 @@ public class Graph : MonoBehaviour
     [SerializeField]
     private bool m_Animate;
 
-    private Dictionary<Functions, GraphFunction> m_Functions;
+    private Dictionary<GraphFunctions, GraphFunction> m_Functions;
 
     [SerializeField]
-    private Functions m_CurrentFunction;
+    private GraphFunctions m_CurrentFunction;
     
     [Header("References and Prefabs")]
     [SerializeField] 
@@ -52,11 +53,12 @@ public class Graph : MonoBehaviour
         m_ResolutionStep = m_Range / m_Resolution;
         m_Cubes = new List<Transform>();
         
-        m_Functions = new Dictionary<Functions, GraphFunction>();
-        m_Functions.Add(Functions.BasicSquared, BasicSquared);
-        m_Functions.Add(Functions.Sin, Sin);
-        m_Functions.Add(Functions.Cos, Cos);
-        m_Functions.Add(Functions.Tan, Tan);
+        m_Functions = new Dictionary<GraphFunctions, GraphFunction>();
+        m_Functions.Add(GraphFunctions.BasicSquared, BasicSquared);
+        m_Functions.Add(GraphFunctions.Sin, Sin);
+        m_Functions.Add(GraphFunctions.MultiSin, MultiSin);
+        m_Functions.Add(GraphFunctions.Cos, Cos);
+        m_Functions.Add(GraphFunctions.Tan, Tan);
         
         CreateGraphMarkers();
         CreateGraphCubes();
@@ -155,6 +157,13 @@ public class Graph : MonoBehaviour
         return Mathf.Sin(_x);
     }
 
+    private float MultiSin(float _x)
+    {
+        float y = Sin(_x);
+        y += Mathf.Sin(2 * _x) / 2;
+        return y;
+    }
+
     private float Cos(float _x)
     {
         return Mathf.Cos(_x);
@@ -166,5 +175,4 @@ public class Graph : MonoBehaviour
     }
     
     #endregion
-    
 }
